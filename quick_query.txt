@@ -1,0 +1,46 @@
+SELECT DISTINCT  
+a.branch_code Branch,
+a.cust_no CIF,
+a.cust_ac_no ACC,
+a.account_class KYCStatus,
+REPLACE(a.ac_desc, ',' ,'*' ) FULLNAME,
+REPLACE(b.telephone, ',' ,'*' )||'*'||REPLACE(b.mobile_number, ',' ,'*' )||'*'||REPLACE(b.home_tel_no, ',' ,'*' )||'*'||REPLACE(b.pa_holder_tel_no, ',' ,'*' ) as TELEPHONE,
+/*b.telephone||'*'||b.mobile_number||'*'||b.home_tel_no||'*'||b.pa_holder_tel_no as TELEPHONE,*/
+NVL(TRUNC(months_between(sysdate, a.date_last_dr)),0) Months_LastDeposit,
+TRUNC(months_between(sysdate, b.date_of_birth) / 12) Age_Client,
+TRUNC(months_between(sysdate, a.ac_open_date)) Age_Acc,
+(SELECT NVL(ROUND(SUM(LCY_AMOUNT) / 3,2),0) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'C') Avg_deposit_In3mth,
+(SELECT NVL(ROUND(SUM(LCY_AMOUNT) / 3,2),0) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'D') Avg_withdrawn_In3mth,
+(select NVL(MAX(AMOUNT_DISBURSED),0) from fcubsawa.CLTB_ACCOUNT_APPS_MASTER where DR_PROD_AC = a.cust_ac_no AND ACCOUNT_STATUS = 'A') LOANAMT,
+(select COUNT(account_number) from fcubsawa.CLTB_ACCOUNT_APPS_MASTER where DR_PROD_AC = a.cust_ac_no) cycle,
+'' AvgDays12Mo,
+'' Blacklist,
+NVL((SELECT ROUND(COUNT(LCY_AMOUNT) / 3,2) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'C' GROUP BY DRCR_IND),0) AvgNumdeposit_In3mth,
+NVL((SELECT ROUND(COUNT(LCY_AMOUNT) / 3,2) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'D' GROUP BY DRCR_IND),0) AvgNumwithdrawn_In3mth,
+b.sex GENDER,
+(SELECT COUNT(DRCR_IND) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'C') TotalNumDep,
+(SELECT COUNT(DRCR_IND) FROM fcubsawa.acvw_all_ac_entries WHERE AC_NO = a.cust_ac_no AND TRUNC(months_between(sysdate, VALUE_DT)) <= 3 AND DRCR_IND = 'D') TotalNumWdraw,
+decode(a.account_class,'PGSTCA','1','0') IsStaff,
+(select round(sysdate -
+(select min(schedule_due_date)
+from fcubsawa.cltb_account_schedules msc
+where (nvl(msc.amount_due, 0)) <>
+(nvl(msc.amount_settled, 0))
+and msc.schedule_due_date < sysdate
+and msc.amount_settled is not null
+and msc.account_number = (select MIN(account_number) from fcubsawa.CLTB_ACCOUNT_APPS_MASTER where DR_PROD_AC = a.cust_ac_no)))
+from dual) DPD,
+CASE WHEN (select COUNT(account_number) from fcubsawa.CLTB_ACCOUNT_APPS_MASTER where DR_PROD_AC = a.cust_ac_no AND ACCOUNT_STATUS = 'A') > 0 
+Then 
+CASE WHEN a.account_class = 'PGSTCA'
+Then 0
+else 1 
+END
+else 0 
+END IsLoanClient
+FROM fcubsawa.sttm_cust_account a, fcubsawa.sttm_cust_personal b
+WHERE a.cust_no = b.customer_no 
+and a.branch_code in (select branch_code from fcubsawa.sttm_branch where regional_office='100')
+and a.account_class NOT IN ('CDINDI','PGATMP','PGBPAY','PGDESA','PGLODR','PGQLAC','PGRAPT','PGTD12','PGTD3M','PGTD6M','PGMOMO','PGNOST','PGCACO','PGCOSA','PGDMAC')
+--fetch next 5000 rows only
+--AND rownum <= 1000;
