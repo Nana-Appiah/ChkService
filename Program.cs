@@ -32,6 +32,7 @@ try
                 Console.WriteLine(String.Format("Generating cheque book data to the path {0}", obj.ConfigValue));
 
                 var xlpath = string.Format("{0}{1}.{2}",obj.ConfigValue, @"CHEQUE_Book_Data", @"xlsx");
+                var localxlpath = string.Format("{0}{1}.{2}", @"C:\Users\ofosu\Music\", @"CHEQUE_Book_Data", @"xlsx");
 
                 if (File.Exists(xlpath))
                 {
@@ -39,24 +40,16 @@ try
                 }
 
                 //call the closedXml module
-                new ClosedXMLClass() { }.Create(xlpath, chequeData);
-                //return;
+                bool bln = new ClosedXMLClass() { }.Create(localxlpath, chequeData);
+                
+                if (bln)
+                {
+                    Console.WriteLine("Data generated into excel file...now copying to shared drive");
 
-                //using (SpreadsheetDocument sp = SpreadsheetDocument.Create(xlpath, SpreadsheetDocumentType.Workbook))
-                //{
-                //    SheetData partSheetData = new XL { }.GenerateSheetDataForDetails(chequeData);
-
-                //    WorkbookPart workbookPart1 = sp.AddWorkbookPart();
-                //    XL.GenerateWorkbookPartContent(workbookPart1);
-
-                //    WorkbookStylesPart workbookStylesPart1 = workbookPart1.AddNewPart<WorkbookStylesPart>("rId3");
-                //    new XL { }.GenerateWorkbookStylesPartContent(workbookStylesPart1);
-
-                //    WorksheetPart worksheetPart1 = workbookPart1.AddNewPart<WorksheetPart>("rId1");
-                //    new XL { }.GenerateWorksheetPartContent(worksheetPart1, partSheetData);
-
-                //}
-
+                    //move file to the network folder
+                    File.Move(localxlpath, xlpath, true);
+                    Console.WriteLine(String.Format("{0} copied successfully to {1}", localxlpath, xlpath));
+                }
 
                 Console.WriteLine("Cheque book generation finished");
             }
