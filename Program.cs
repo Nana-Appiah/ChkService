@@ -38,6 +38,10 @@ try
                     File.Delete(xlpath);
                 }
 
+                //call the closedXml module
+                new ClosedXMLClass() { }.Create(xlpath, chequeData);
+                return;
+
                 using (SpreadsheetDocument sp = SpreadsheetDocument.Create(xlpath, SpreadsheetDocumentType.Workbook))
                 {
                     SheetData partSheetData = new XL { }.GenerateSheetDataForDetails(chequeData);

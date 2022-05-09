@@ -5,5 +5,5 @@ SELECT DISTINCT a.order_date CHQ_ORDER_DATE, a.account ACCOUNT_NO, b.ac_desc ACC
                                         FROM fcubsawa.catm_check_book a, fcubsawa.sttm_cust_account b, fcubsawa.sttm_cust_personal c
                                         where b.cust_ac_no = a.account and b.cust_no=c.customer_no
                                         and a.branch in (select branch_code from fcubsawa.sttm_branch where regional_office='100')
-                                        and a.order_date BETWEEN '1-MAR-2022' AND '31-DEC-2022'
+                                        and a.order_date BETWEEN '1-MAY-2022' AND '31-DEC-2022'
                                         order by a.order_date
