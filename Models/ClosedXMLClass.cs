@@ -43,21 +43,26 @@ namespace ChequeBookService.Models
             int rowId = 2;
             foreach(var d in dt)
             {
-                worksheet.Cell(rowId, 1).Value = Convert.ToDateTime(d.ChqOrderDate).ToString("dd-mm-yyyy");
-                worksheet.Cell(rowId, 2).Value = d.AccountNumber;
+                worksheet.Cell(rowId, 1).Style.DateFormat.SetFormat("dd-MMM-yyyy");
+                worksheet.Cell(rowId, 1).Value = Convert.ToDateTime(d.ChqOrderDate).ToString("dd-MMM-yyyy");
+                worksheet.Cell(rowId, 2).SetValue(d.AccountNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
                 worksheet.Cell(rowId, 3).Value = d.AccountName;
                 worksheet.Cell(rowId, 4).Value = d.AccountClass;
                 worksheet.Cell(rowId, 5).Value = d.ChequeType;
                 worksheet.Cell(rowId, 6).Value = d.Notes;
                 worksheet.Cell(rowId, 7).Value = d.Leaves;
-                worksheet.Cell(rowId, 8).Value = d.ChequeNumber;
+                worksheet.Cell(rowId, 8).SetValue(d.ChequeNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
                 worksheet.Cell(rowId, 9).Value = d.ReferenceId;
                 worksheet.Cell(rowId, 10).Value = d.ReferenceNo;
                 worksheet.Cell(rowId, 11).Value = d.BranchCode;
-                worksheet.Cell(rowId, 12).Value = d.TelephoneNumber;
+                worksheet.Cell(rowId, 12).SetValue(d.TelephoneNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
 
                 rowId += 1;
             }
+
+            //adjusting the contents
+            worksheet.Columns().AdjustToContents();
+            worksheet.Rows().AdjustToContents();
 
             //saving file to file path
             workbook.SaveAs(filePath);

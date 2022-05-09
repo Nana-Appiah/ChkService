@@ -31,7 +31,7 @@ try
             {
                 Console.WriteLine(String.Format("Generating cheque book data to the path {0}", obj.ConfigValue));
 
-                var xlpath = string.Format("{0}{1}_{2}.{3}", obj.ConfigValue, @"CHEQUE_Book_Data", DateTime.Now.ToShortDateString().Replace("/", "_"), @"xlsx");
+                var xlpath = string.Format("{0}{1}.{2}",obj.ConfigValue, @"CHEQUE_Book_Data", @"xlsx");
 
                 if (File.Exists(xlpath))
                 {
@@ -40,22 +40,23 @@ try
 
                 //call the closedXml module
                 new ClosedXMLClass() { }.Create(xlpath, chequeData);
-                return;
+                //return;
 
-                using (SpreadsheetDocument sp = SpreadsheetDocument.Create(xlpath, SpreadsheetDocumentType.Workbook))
-                {
-                    SheetData partSheetData = new XL { }.GenerateSheetDataForDetails(chequeData);
+                //using (SpreadsheetDocument sp = SpreadsheetDocument.Create(xlpath, SpreadsheetDocumentType.Workbook))
+                //{
+                //    SheetData partSheetData = new XL { }.GenerateSheetDataForDetails(chequeData);
 
-                    WorkbookPart workbookPart1 = sp.AddWorkbookPart();
-                    XL.GenerateWorkbookPartContent(workbookPart1);
+                //    WorkbookPart workbookPart1 = sp.AddWorkbookPart();
+                //    XL.GenerateWorkbookPartContent(workbookPart1);
 
-                    WorkbookStylesPart workbookStylesPart1 = workbookPart1.AddNewPart<WorkbookStylesPart>("rId3");
-                    new XL { }.GenerateWorkbookStylesPartContent(workbookStylesPart1);
+                //    WorkbookStylesPart workbookStylesPart1 = workbookPart1.AddNewPart<WorkbookStylesPart>("rId3");
+                //    new XL { }.GenerateWorkbookStylesPartContent(workbookStylesPart1);
 
-                    WorksheetPart worksheetPart1 = workbookPart1.AddNewPart<WorksheetPart>("rId1");
-                    new XL { }.GenerateWorksheetPartContent(worksheetPart1, partSheetData);
+                //    WorksheetPart worksheetPart1 = workbookPart1.AddNewPart<WorksheetPart>("rId1");
+                //    new XL { }.GenerateWorksheetPartContent(worksheetPart1, partSheetData);
 
-                }
+                //}
+
 
                 Console.WriteLine("Cheque book generation finished");
             }
