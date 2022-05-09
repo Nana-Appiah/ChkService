@@ -48,7 +48,7 @@ namespace ChequeBookService.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder builder)
         {
-            builder.UseSqlServer(@"Data Source=DESKTOP-AHTKNDP\ITWORKS;Initial Catalog=DAutomate;User ID=sa;Password=excalibur@33;TrustServerCertificate=True");
+            builder.UseSqlServer(@"Data Source=10.150.0.19;Initial Catalog=DAutomate;User ID=sa;Password=$Passw0rd;TrustServerCertificate=True");
         }
 
         #endregion
