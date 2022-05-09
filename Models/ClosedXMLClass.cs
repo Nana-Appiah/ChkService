@@ -30,11 +30,20 @@ namespace ChequeBookService.Models
             worksheet.Cell("K1").Value = @"BRANCH_CODE";
             worksheet.Cell("L1").Value = @"TEL_NO";
 
+            worksheet.Cell("B1").DataType = XLDataType.Text;
+            worksheet.Cell("B1").Style.NumberFormat.Format = "_ * # ##0.00_ ;_ * -# ##0.00_ ;_ * \"-\"??_ ;_ @_ ";
+            worksheet.Cell("B1").Style.NumberFormat.SetNumberFormatId(43);
+
+            //creating a range for styling
+            IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+            range.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            range.Style.Font.Bold = true;
+            
             //iterating through the data
             int rowId = 2;
             foreach(var d in dt)
             {
-                worksheet.Cell(rowId, 1).Value = d.ChqOrderDate;
+                worksheet.Cell(rowId, 1).Value = Convert.ToDateTime(d.ChqOrderDate).ToString("dd-mm-yyyy");
                 worksheet.Cell(rowId, 2).Value = d.AccountNumber;
                 worksheet.Cell(rowId, 3).Value = d.AccountName;
                 worksheet.Cell(rowId, 4).Value = d.AccountClass;
