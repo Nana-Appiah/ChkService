@@ -42,7 +42,6 @@ G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\S
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.IO.Packaging.dll
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.Runtime.Caching.dll
-G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.Runtime.CompilerServices.Unsafe.dll
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.Security.Permissions.dll
 G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\System.Windows.Extensions.dll
@@ -152,3 +151,6 @@ C:\Users\ofosu\Documents\Projects\Automations\ChkService\obj\Debug\net6.0\refint
 C:\Users\ofosu\Documents\Projects\Automations\ChkService\obj\Debug\net6.0\ChequeBookService.pdb
 C:\Users\ofosu\Documents\Projects\Automations\ChkService\obj\Debug\net6.0\ChequeBookService.genruntimeconfig.cache
 C:\Users\ofosu\Documents\Projects\Automations\ChkService\obj\Debug\net6.0\ref\ChequeBookService.dll
+G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\ClosedXML.dll
+G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\ClosedXML.Extensions.Mvc.dll
+G:\Dev_Repository\Projects\Nana\Automations\ChequeBookService\bin\Debug\net6.0\ExcelNumberFormat.dll

@@ -30,25 +30,39 @@ namespace ChequeBookService.Models
             worksheet.Cell("K1").Value = @"BRANCH_CODE";
             worksheet.Cell("L1").Value = @"TEL_NO";
 
+            worksheet.Cell("B1").DataType = XLDataType.Text;
+            worksheet.Cell("B1").Style.NumberFormat.Format = "_ * # ##0.00_ ;_ * -# ##0.00_ ;_ * \"-\"??_ ;_ @_ ";
+            worksheet.Cell("B1").Style.NumberFormat.SetNumberFormatId(43);
+
+            //creating a range for styling
+            IXLRange range = worksheet.Range(worksheet.Cell(1, 1).Address, worksheet.Cell(1, 12).Address);
+            range.Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            range.Style.Font.Bold = true;
+            
             //iterating through the data
             int rowId = 2;
             foreach(var d in dt)
             {
-                worksheet.Cell(rowId, 1).Value = d.ChqOrderDate;
-                worksheet.Cell(rowId, 2).Value = d.AccountNumber;
+                worksheet.Cell(rowId, 1).Style.DateFormat.SetFormat("dd-MMM-yyyy");
+                worksheet.Cell(rowId, 1).Value = Convert.ToDateTime(d.ChqOrderDate).ToString("dd-MMM-yyyy");
+                worksheet.Cell(rowId, 2).SetValue(d.AccountNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
                 worksheet.Cell(rowId, 3).Value = d.AccountName;
                 worksheet.Cell(rowId, 4).Value = d.AccountClass;
                 worksheet.Cell(rowId, 5).Value = d.ChequeType;
                 worksheet.Cell(rowId, 6).Value = d.Notes;
                 worksheet.Cell(rowId, 7).Value = d.Leaves;
-                worksheet.Cell(rowId, 8).Value = d.ChequeNumber;
+                worksheet.Cell(rowId, 8).SetValue(d.ChequeNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
                 worksheet.Cell(rowId, 9).Value = d.ReferenceId;
                 worksheet.Cell(rowId, 10).Value = d.ReferenceNo;
                 worksheet.Cell(rowId, 11).Value = d.BranchCode;
-                worksheet.Cell(rowId, 12).Value = d.TelephoneNumber;
+                worksheet.Cell(rowId, 12).SetValue(d.TelephoneNumber).Style.NumberFormat.SetNumberFormatId((int)XLPredefinedFormat.Number.Text);
 
                 rowId += 1;
             }
+
+            //adjusting the contents
+            worksheet.Columns().AdjustToContents();
+            worksheet.Rows().AdjustToContents();
 
             //saving file to file path
             workbook.SaveAs(filePath);
