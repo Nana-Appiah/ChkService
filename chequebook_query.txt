@@ -1,0 +1,9 @@
+SELECT DISTINCT a.order_date CHQ_ORDER_DATE, a.account ACCOUNT_NO, b.ac_desc ACCOUNT_NAME, b.account_class ACCOUNT_CLASS,
+                                        decode(b.account_type,'U','CURR','S','SAV','N','NOS','Y','VOS') CHEQUE_TYPE,'1 BOOKLET' NOTES, a.check_leaves LEAVES,a.first_check_no CHECK_NO
+                                        ,decode(b.account_type,'U','CURR','S','SAV','N','NOS','Y','VOS')||'.'||a.account||'.'||a.first_check_no as REFERENCE_ID
+                                        ,a.trn_ref_no REFERENCE_NO,b.branch_code, c.mobile_number||'/'||c.telephone||'/'||c.home_tel_no||'/'||c.pa_holder_tel_no as TEL_NO
+                                        FROM fcubsawa.catm_check_book a, fcubsawa.sttm_cust_account b, fcubsawa.sttm_cust_personal c
+                                        where b.cust_ac_no = a.account and b.cust_no=c.customer_no
+                                        and a.branch in (select branch_code from fcubsawa.sttm_branch where regional_office='100')
+                                        and a.order_date BETWEEN '1-MAR-2022' AND '31-DEC-2022'
+                                        order by a.order_date
